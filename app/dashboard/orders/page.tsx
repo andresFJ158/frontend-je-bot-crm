@@ -47,6 +47,11 @@ interface Order {
   id: string;
   branchId: string;
   userId?: string;
+  agentId?: string;
+  agent?: {
+    id: string;
+    name: string;
+  } | null;
   status: string;
   subtotal: number;
   discount: number;
