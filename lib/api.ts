@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // Function to get API URL dynamically (checks runtime config first, then build-time)
 const getApiUrl = () => {
-<<<<<<< HEAD
   // First, try to get from localStorage (manual override for debugging)
   let envUrl: string | undefined;
   
@@ -11,27 +10,6 @@ const getApiUrl = () => {
     if (manualUrl) {
       envUrl = manualUrl;
       console.log('🔧 Using manual API URL override:', envUrl);
-=======
-  // First, try to get from runtime config (window.__ENV__)
-  let envUrl: string | undefined;
-  
-  if (typeof window !== 'undefined') {
-    const windowEnv = (window as any).__ENV__;
-    if (windowEnv?.NEXT_PUBLIC_API_URL) {
-      envUrl = windowEnv.NEXT_PUBLIC_API_URL;
-    }
-  }
-  
-  // Fallback to build-time environment variable
-  if (!envUrl) {
-    envUrl = process.env.NEXT_PUBLIC_API_URL;
-  }
-  
-  if (envUrl) {
-    // If URL contains traefik.me, always use HTTPS (Traefik typically uses HTTPS)
-    if (envUrl.includes('traefik.me')) {
-      return envUrl.replace('http://', 'https://');
->>>>>>> 51604719b77c33a38e73c65d8b98fbd08a42ecd7
     }
   }
   
@@ -173,4 +151,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
