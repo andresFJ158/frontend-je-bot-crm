@@ -203,7 +203,7 @@ export default function WhatsAppPage() {
               <div className="text-sm text-text-secondary text-center max-w-md">
                 <p className="mb-2">1. Abre WhatsApp en tu teléfono</p>
                 <p className="mb-2">2. Ve a Configuración → Dispositivos vinculados</p>
-                <p className="mb-2">3. Toca "Vincular un dispositivo"</p>
+                <p className="mb-2">3. Toca &quot;Vincular un dispositivo&quot;</p>
                 <p>4. Escanea el código QR que aparece arriba</p>
               </div>
             </div>
@@ -226,7 +226,7 @@ export default function WhatsAppPage() {
         {status.state === 'disconnected' && !qr && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
             <p className="text-yellow-800 mb-4">
-              ⚠️ WhatsApp está desconectado. Haz clic en "Reconectar" para iniciar la conexión y generar un nuevo código QR.
+              ⚠️ WhatsApp está desconectado. Haz clic en &quot;Reconectar&quot; para iniciar la conexión y generar un nuevo código QR.
             </p>
             <button
               onClick={handleReconnect}
@@ -257,7 +257,7 @@ export default function WhatsAppPage() {
               <div className="text-sm text-text-secondary text-center max-w-md">
                 <p className="mb-2">1. Abre WhatsApp en tu teléfono</p>
                 <p className="mb-2">2. Ve a Configuración → Dispositivos vinculados</p>
-                <p className="mb-2">3. Toca "Vincular un dispositivo"</p>
+                <p className="mb-2">3. Toca &quot;Vincular un dispositivo&quot;</p>
                 <p>4. Escanea el código QR que aparece arriba</p>
               </div>
             </div>

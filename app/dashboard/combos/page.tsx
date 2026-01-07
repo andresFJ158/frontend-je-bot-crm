@@ -419,7 +419,7 @@ export default function CombosPage() {
                 </div>
               ))}
               {comboItems.length === 0 && (
-                <p className="text-sm text-text-secondary">No hay productos agregados. Haz clic en "Agregar Producto" para comenzar.</p>
+                <p className="text-sm text-text-secondary">No hay productos agregados. Haz clic en &quot;Agregar Producto&quot; para comenzar.</p>
               )}
             </div>
 
