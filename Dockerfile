@@ -52,5 +52,10 @@ EXPOSE 3030
 ENV PORT=3030
 ENV HOSTNAME="0.0.0.0"
 
+# Allow NEXT_PUBLIC_API_URL to be set at runtime
+# This will be read by the /api/config endpoint
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 CMD ["node", "server.js"]
 
