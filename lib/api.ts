@@ -1,8 +1,22 @@
 import axios from 'axios';
 
-// Auto-detect HTTPS if API URL uses HTTPS, otherwise use HTTP
+// Function to get API URL dynamically (checks runtime config first, then build-time)
 const getApiUrl = () => {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  // First, try to get from runtime config (window.__ENV__)
+  let envUrl: string | undefined;
+  
+  if (typeof window !== 'undefined') {
+    const windowEnv = (window as any).__ENV__;
+    if (windowEnv?.NEXT_PUBLIC_API_URL) {
+      envUrl = windowEnv.NEXT_PUBLIC_API_URL;
+    }
+  }
+  
+  // Fallback to build-time environment variable
+  if (!envUrl) {
+    envUrl = process.env.NEXT_PUBLIC_API_URL;
+  }
+  
   if (envUrl) {
     // If URL contains traefik.me, always use HTTPS (Traefik typically uses HTTPS)
     if (envUrl.includes('traefik.me')) {
@@ -17,18 +31,28 @@ const getApiUrl = () => {
   return 'http://localhost:9090';
 };
 
-const API_URL = getApiUrl();
+// Initial API URL
+const initialApiUrl = getApiUrl();
 
 // Log API URL for debugging
 if (typeof window !== 'undefined') {
-  console.log('🔗 API URL:', API_URL);
+  console.log('🔗 API URL:', initialApiUrl);
 }
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: initialApiUrl,
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+// Update baseURL dynamically before each request (allows runtime configuration)
+api.interceptors.request.use((config) => {
+  const dynamicUrl = getApiUrl();
+  config.baseURL = dynamicUrl;
+  return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 // Add token to requests
