@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 interface Branch {
   id: string;
@@ -38,10 +39,7 @@ export default function BranchMap({
     if (typeof window === 'undefined') return;
 
     // Load Leaflet dynamically
-    Promise.all([
-      import('leaflet'),
-      import('leaflet/dist/leaflet.css'),
-    ]).then(([L]) => {
+    import('leaflet').then((L) => {
       // Fix for default marker icon in Next.js
       delete (L.default.Icon.Default.prototype as any)._getIconUrl;
       L.default.Icon.Default.mergeOptions({
