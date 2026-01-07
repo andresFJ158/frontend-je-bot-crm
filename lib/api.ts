@@ -2,10 +2,19 @@ import axios from 'axios';
 
 // Function to get API URL dynamically (checks runtime config first, then build-time)
 const getApiUrl = () => {
-  // First, try to get from runtime config (window.__ENV__)
+  // First, try to get from localStorage (manual override for debugging)
   let envUrl: string | undefined;
   
   if (typeof window !== 'undefined') {
+    const manualUrl = localStorage.getItem('API_URL_OVERRIDE');
+    if (manualUrl) {
+      envUrl = manualUrl;
+      console.log('🔧 Using manual API URL override:', envUrl);
+    }
+  }
+  
+  // Second, try to get from runtime config (window.__ENV__)
+  if (!envUrl && typeof window !== 'undefined') {
     const windowEnv = (window as any).__ENV__;
     if (windowEnv?.NEXT_PUBLIC_API_URL) {
       envUrl = windowEnv.NEXT_PUBLIC_API_URL;
@@ -18,15 +27,30 @@ const getApiUrl = () => {
   }
   
   if (envUrl) {
-    // If URL contains traefik.me, always use HTTPS (Traefik typically uses HTTPS)
-    if (envUrl.includes('traefik.me')) {
-      return envUrl.replace('http://', 'https://');
+    // Don't use inferred URLs that look like they came from the frontend hostname
+    // Only use explicitly configured URLs
+    if (envUrl.includes('traefik.me') && envUrl.includes(':9090')) {
+      // This looks like an incorrectly inferred URL, ignore it
+      console.warn('⚠️ Ignoring inferred API URL:', envUrl);
+      console.warn('💡 Please configure NEXT_PUBLIC_API_URL correctly');
+      envUrl = undefined;
     }
-    // If already HTTPS, keep it
-    if (envUrl.startsWith('https://')) {
+    
+    if (envUrl) {
+      // If URL contains traefik.me (without port), always use HTTPS
+      if (envUrl.includes('traefik.me') && !envUrl.includes(':9090')) {
+        return envUrl.replace('http://', 'https://');
+      }
+      // If already HTTPS, keep it
+      if (envUrl.startsWith('https://')) {
+        return envUrl;
+      }
+      // If HTTP, use as is
+      if (envUrl.startsWith('http://')) {
+        return envUrl;
+      }
       return envUrl;
     }
-    return envUrl;
   }
   return 'http://localhost:9090';
 };
