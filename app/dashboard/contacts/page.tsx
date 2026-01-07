@@ -118,7 +118,7 @@ export default function ContactsPage() {
       await loadStats();
       setShowForm(false);
       setEditingContact(null);
-      setFormData({ phone: '', name: '', lastName: '', email: '', city: '' });
+      setFormData({ phone: '', name: '', lastName: '', email: '', city: '', initialMessage: '' });
     } catch (error: any) {
       setError(error.response?.data?.message || 'Error al actualizar el contacto');
     } finally {
@@ -148,6 +148,7 @@ export default function ContactsPage() {
       lastName: contact.lastName || '',
       email: contact.email || '',
       city: contact.city || '',
+      initialMessage: '',
     });
     setShowForm(true);
   };
@@ -166,7 +167,7 @@ export default function ContactsPage() {
         <button
           onClick={() => {
             setEditingContact(null);
-            setFormData({ phone: '', name: '', lastName: '', email: '', city: '' });
+            setFormData({ phone: '', name: '', lastName: '', email: '', city: '', initialMessage: '' });
             setError('');
             setShowForm(!showForm);
           }}
