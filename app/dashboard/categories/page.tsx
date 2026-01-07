@@ -89,7 +89,7 @@ export default function CategoriesPage() {
 
     while (current) {
       path.unshift(current.name);
-      const parentId = current.parentId;
+      const parentId: string | undefined = current.parentId;
       if (parentId && flatCategories.length > 0) {
         current = flatCategories.find((c) => c.id === parentId);
       } else {
