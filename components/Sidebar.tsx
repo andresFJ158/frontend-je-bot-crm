@@ -273,7 +273,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           <span>Cerrar sesión</span>
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
