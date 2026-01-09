@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { MessageSquare, Users, Settings, BarChart3, LogOut, Smartphone, Package, MapPin, FolderTree, Warehouse, Contact, Zap, ShoppingCart, ChevronDown, ChevronRight, CreditCard } from 'lucide-react';
+import { MessageSquare, Users, Settings, BarChart3, LogOut, Smartphone, Package, MapPin, FolderTree, Warehouse, Contact, Zap, ShoppingCart, ChevronDown, ChevronRight, CreditCard, Menu, X } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
@@ -19,7 +19,12 @@ interface MenuSection {
   items: MenuItem[];
 }
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { agent, setAgent, setToken, disconnectSocket, conversations, socket } = useStore();
@@ -191,13 +196,36 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-panel border-r border-border h-screen flex flex-col">
-      <div className="p-6 border-b border-border">
-        <h2 className="text-xl font-bold">WhatsApp CRM</h2>
-        {agent && (
-          <p className="text-sm text-text-secondary mt-1">{agent.name}</p>
-        )}
-      </div>
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={cn(
+        "fixed lg:static inset-y-0 left-0 z-50 bg-panel border-r border-border h-screen flex flex-col transition-transform duration-300 ease-in-out",
+        "w-64",
+        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}>
+        <div className="p-4 lg:p-6 border-b border-border flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold">WhatsApp CRM</h2>
+            {agent && (
+              <p className="text-sm text-text-secondary mt-1">{agent.name}</p>
+            )}
+          </div>
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 hover:bg-background rounded-md transition-colors"
+            aria-label="Cerrar menú"
+          >
+            <X size={24} />
+          </button>
+        </div>
       <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
         {menuSections.map((section, sectionIndex) => {
           const isExpanded = expandedSections[section.title] ?? false;

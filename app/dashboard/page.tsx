@@ -5,6 +5,8 @@ import { useStore } from '@/lib/store';
 import { Topbar } from '@/components/Topbar';
 import { ChatList } from '@/components/ChatList';
 import { ChatWindow } from '@/components/ChatWindow';
+import { ArrowLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 
 export default function DashboardPage() {
@@ -110,9 +112,13 @@ export default function DashboardPage() {
     <div className="flex flex-col h-full">
       <Topbar onSearch={handleSearch} onFilter={handleFilter} />
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-80 border-r border-border flex flex-col">
+        {/* Chat List - Hidden on mobile when conversation is selected */}
+        <div className={cn(
+          "w-full md:w-80 border-r border-border flex flex-col",
+          selectedConversation ? "hidden md:flex" : "flex"
+        )}>
           <div className="p-4 border-b border-border flex items-center justify-between">
-            <h2 className="font-semibold">Conversaciones</h2>
+            <h2 className="font-semibold text-sm sm:text-base">Conversaciones</h2>
             {conversations.some(c => (c.unreadCount || 0) > 0) && (
               <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-1">
                 {conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0)}
@@ -125,7 +131,28 @@ export default function DashboardPage() {
             <ChatList />
           )}
         </div>
-        <div className="flex-1 flex flex-col">
+        
+        {/* Chat Window - Full width on mobile when conversation is selected */}
+        <div className={cn(
+          "flex-1 flex flex-col",
+          selectedConversation ? "flex" : "hidden md:flex"
+        )}>
+          {selectedConversation && (
+            <div className="md:hidden p-3 border-b border-border flex items-center gap-3">
+              <button
+                onClick={() => setSelectedConversation(null)}
+                className="p-2 hover:bg-background rounded-md transition-colors"
+                aria-label="Volver a conversaciones"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-sm truncate">
+                  {selectedConversation.user?.name || selectedConversation.user?.phone || 'Usuario'}
+                </h3>
+              </div>
+            </div>
+          )}
           <ChatWindow />
         </div>
       </div>

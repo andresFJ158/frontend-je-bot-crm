@@ -8,6 +8,7 @@ import { ToastContainer } from '@/components/Toast';
 import { MessageNotification } from '@/components/MessageNotification';
 import { requestNotificationPermission, showBrowserNotification } from '@/lib/notifications';
 import { playBeep } from '@/lib/sounds';
+import { Menu } from 'lucide-react';
 
 export default function DashboardLayout({
   children,
@@ -20,6 +21,7 @@ export default function DashboardLayout({
     message: any;
     conversation: any;
   } | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -193,10 +195,20 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        {children}
+    <div className="flex h-screen overflow-hidden">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+        {/* Mobile menu button */}
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="lg:hidden fixed top-4 left-4 z-30 p-2 bg-panel border border-border rounded-md hover:bg-background transition-colors"
+          aria-label="Abrir menú"
+        >
+          <Menu size={24} />
+        </button>
+        <div className="flex-1 overflow-y-auto pt-16 lg:pt-0">
+          {children}
+        </div>
       </div>
       <ToastContainer />
       {notificationMessage && (

@@ -26,56 +26,62 @@ export function Topbar({ onSearch, onFilter }: TopbarProps) {
   };
 
   return (
-    <div className="h-16 bg-panel border-b border-border px-6 flex items-center gap-4">
-      <div className="flex-1 relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary" size={20} />
+    <div className="h-16 bg-panel border-b border-border px-4 sm:px-6 flex items-center gap-2 sm:gap-4">
+      <div className="flex-1 relative min-w-0">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary" size={18} />
         <input
           type="text"
           placeholder="Buscar conversaciones..."
           value={searchQuery}
           onChange={handleSearch}
-          className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full pl-9 sm:pl-10 pr-4 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
         />
       </div>
       <div className="relative">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="px-4 py-2 bg-background border border-border rounded-md hover:bg-background/80 flex items-center gap-2"
+          className="px-3 sm:px-4 py-2 bg-background border border-border rounded-md hover:bg-background/80 flex items-center gap-1 sm:gap-2"
         >
-          <Filter size={20} />
-          <span>Filtros</span>
+          <Filter size={18} className="sm:w-5 sm:h-5" />
+          <span className="hidden sm:inline">Filtros</span>
         </button>
         {showFilters && (
-          <div className="absolute right-0 top-full mt-2 bg-panel border border-border rounded-md p-4 w-64 z-10">
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm mb-1">Etiqueta</label>
-                <select
-                  value={filters.tag || ''}
-                  onChange={(e) => handleFilterChange('tag', e.target.value)}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-md"
-                >
-                  <option value="">Todas</option>
-                  <option value="ventas">Ventas</option>
-                  <option value="soporte">Soporte</option>
-                  <option value="facturacion">Facturación</option>
-                  <option value="otros">Otros</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm mb-1">Modo</label>
-                <select
-                  value={filters.mode || ''}
-                  onChange={(e) => handleFilterChange('mode', e.target.value)}
-                  className="w-full px-3 py-2 bg-background border border-border rounded-md"
-                >
-                  <option value="">Todos</option>
-                  <option value="BOT">Bot</option>
-                  <option value="HUMAN">Humano</option>
-                </select>
+          <>
+            <div 
+              className="fixed inset-0 z-10 sm:hidden"
+              onClick={() => setShowFilters(false)}
+            />
+            <div className="absolute right-0 top-full mt-2 bg-panel border border-border rounded-md p-4 w-64 sm:w-64 z-20 shadow-lg">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm mb-1">Etiqueta</label>
+                  <select
+                    value={filters.tag || ''}
+                    onChange={(e) => handleFilterChange('tag', e.target.value)}
+                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-sm"
+                  >
+                    <option value="">Todas</option>
+                    <option value="ventas">Ventas</option>
+                    <option value="soporte">Soporte</option>
+                    <option value="facturacion">Facturación</option>
+                    <option value="otros">Otros</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Modo</label>
+                  <select
+                    value={filters.mode || ''}
+                    onChange={(e) => handleFilterChange('mode', e.target.value)}
+                    className="w-full px-3 py-2 bg-background border border-border rounded-md text-sm"
+                  >
+                    <option value="">Todos</option>
+                    <option value="BOT">Bot</option>
+                    <option value="HUMAN">Humano</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>
